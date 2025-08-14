@@ -232,6 +232,52 @@ switch upper(modType)
             tmp = cst(i); cst(i) = cst(k); cst(k) = tmp;
         end
         hmod.m = 32; hmod.modulate = @(x) genqammod(x, cst);
+    % 自己添加的
+    case 'APSK64'
+        % APSK64参数设置（4个同心圆）
+        r1 = 1.0;    % 内环半径
+        r2 = 2.73;   % 第二环半径
+        r3 = 4.30;   % 第三环半径
+        r4 = 5.27;   % 外环半径
+        
+        % 生成星座点：4+12+20+28=64
+        cst = [exp(1j*2*pi*(0.5:1:3.5)/4)*r1, ...     % 内环4点
+               exp(1j*2*pi*(0.5:1:11.5)/12)*r2, ...   % 第二环12点
+               exp(1j*2*pi*(0.5:1:19.5)/20)*r3, ...   % 第三环20点
+               exp(1j*2*pi*(0.5:1:27.5)/28)*r4];      % 外环28点
+        
+        % 星座点交织（避免频谱异常）
+        for cnt = 1:2:length(cst)/2
+            k = cnt;
+            i = cnt + length(cst)/2;
+            tmp = cst(i); cst(i) = cst(k); cst(k) = tmp;
+        end
+        hmod.m = 64; 
+        hmod.modulate = @(x) genqammod(x, cst);
+        
+    case 'APSK128'
+        % APSK128参数设置（5个同心圆）
+        r1 = 1.0;    % 内环半径
+        r2 = 1.8;    % 第二环半径
+        r3 = 2.6;    % 第三环半径
+        r4 = 3.5;    % 第四环半径
+        r5 = 4.4;    % 外环半径
+        
+        % 生成星座点：8+16+24+32+48=128
+        cst = [exp(1j*2*pi*(0.5:1:7.5)/8)*r1, ...     % 内环8点
+               exp(1j*2*pi*(0.5:1:15.5)/16)*r2, ...   % 第二环16点
+               exp(1j*2*pi*(0.5:1:23.5)/24)*r3, ...   % 第三环24点
+               exp(1j*2*pi*(0.5:1:31.5)/32)*r4, ...   % 第四环32点
+               exp(1j*2*pi*(0.5:1:47.5)/48)*r5];      % 外环48点
+        
+        % 星座点交织（避免频谱异常）
+        for cnt = 1:2:length(cst)/2
+            k = cnt;
+            i = cnt + length(cst)/2;
+            tmp = cst(i); cst(i) = cst(k); cst(k) = tmp;
+        end
+        hmod.m = 128;
+        hmod.modulate = @(x) genqammod(x, cst);
 %    case 'PAM4_OLD'
 %        hmod = modem.pammod('M', 4, 'SymbolOrder', 'user-defined', 'SymbolMapping', [3 1 0 2]);
     case 'PAM4'
@@ -666,7 +712,8 @@ else
         end
         len = length(iqdata);
         cy = round(len * carrierOffset(i) / sampleRate);
-        shiftSig = exp(j * 2 * pi * cy * (linspace(0, 1 - 1/len, len) + randStream.rand(1)));
+        % shiftSig = exp(j * 2 * pi * cy * (linspace(0, 1 - 1/len, len) + randStream.rand(1)));
+        shiftSig = exp(j * 2 * pi * cy * (linspace(0, 1 - 1/len, len)));
         if (isempty(result))
             result = zeros(1, len);
         end

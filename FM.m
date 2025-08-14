@@ -33,7 +33,13 @@ classdef FM
         function Hd = getFilter(self)
             
             Fstop1 = abs(self.carrier_freq)-self.bandwidth/2*1.2;    % First Stopband Frequency
+            if Fstop1<0
+                Fstop1 = 0;
+            end
             Fpass1 = abs(self.carrier_freq)-self.bandwidth/2;    % First Passband Frequency
+            if Fpass1<0
+                Fpass1 = 0;
+            end
             Fpass2 = abs(self.carrier_freq)+self.bandwidth/2;   % Second Passband Frequency
             Fstop2 = abs(self.carrier_freq)+self.bandwidth/2*1.2;   % Second Stopband Frequency
             Astop1 = 100;          % First Stopband Attenuation (dB)
@@ -58,7 +64,7 @@ classdef FM
             tmp_time_domain = zeros(self.num_iq_samples,1);
             % carrier = exp(1i*2*pi*self.carrier_freq*t);
             %message-rand
-            nn = randi([3,6]);
+            nn = randi([4,10]);
             message_ = zeros(1,self.num_iq_samples);
             for i=1:nn
                 tmp = randi([0,2]);

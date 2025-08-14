@@ -22,7 +22,7 @@ function varargout = iqmod_gui(varargin)
 
 % Edit the above text to modify the response to help iqmod_gui
 
-% Last Modified by GUIDE v2.5 22-May-2023 09:31:52
+% Last Modified by GUIDE v2.5 14-Aug-2025 09:51:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,6 +57,14 @@ handles.output = hObject;
 handles.os_resolution = 0.0005;
 % Update handles structure
 guidata(hObject, handles);
+
+% 设置调制方式下拉菜单选项，添加 APSK64
+set(handles.popupmenuModType, 'String', {...
+    'BPSK', 'BPSK_X', 'QPSK', 'OQPSK', '8-PSK', ...
+    'QAM8', 'QAM16', 'QAM32', 'QAM64', 'QAM128', 'QAM256', 'QAM512', 'QAM1024', 'QAM2048', 'QAM4096', ...
+    'APSK16', 'APSK32', 'APSK64', 'APSK128', ...
+    'PAM4', 'OOK', 'CPM' ...
+    });
 
 arbConfig = loadArbConfig();
 switch arbConfig.model

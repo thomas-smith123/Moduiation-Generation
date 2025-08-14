@@ -96,7 +96,7 @@ classdef ADSB
             self.iq_data = zeros(1,self.num_iq_samples);
             self.frame = self.frame';
 
-            position = randi([0,2]);
+            position = randi([1,2]);
             tmp_time_domain = zeros(self.num_iq_samples,1);
             if size(self.frame,1) >= self.num_iq_samples % 如果信号长度大于一帧的长度
                 if position == 0
