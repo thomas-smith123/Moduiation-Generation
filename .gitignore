@@ -1,3 +1,2 @@
-FM.m
-*.bin
-frft.m
+model/complexPart/__pycache__/convComplex.cpython-310.pyc
+*.pyc
